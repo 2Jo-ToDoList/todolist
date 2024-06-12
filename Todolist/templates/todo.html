@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+        * {
+            font-family: "Gowun Dodum", sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #FFFFE0;
+            background-position: center;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        .nav1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .nav1,
+        .nav3 {
+            text-align: center;
+            margin: 0 200px;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            padding: 15px 20px;
+            border: 2px solid #ccc;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+
+        input[type="date"] {
+            flex: 0 0 200px;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus {
+            border-color: #6A5ACD;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            padding: 20px 0;
+
+            display: flex;
+            width: 100%;
+            margin-bottom: 30px;
+            padding-left: 100px;
+            padding-right: 100px;
+        }
+
+        button {
+            background-color: #B3E0FF;
+            border: none;
+            color: black;
+            padding: 8px 12px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .block {
+            background-color: #FFD700;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            width: 1500px;
+            margin: 10px;
+            text-align: left;
+            justify-content: space-between;
+            display: flex;
+            align-items: center;
+        }
+
+        .chick {
+            height: 100px;
+        }
+
+        .nav-img {
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+        }
+
+        .main-msg {
+            display: flex;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- navbar -->
+    <div class="container">
+        <h3 class="nav1" id='weather-msg'>Weather</h3>
+        <div class='nav-img'>
+            <img class='chick' src="./chick.png" alt="">
+            <h1 class="nav2">To Do List</h1>
+            <img class='chick' src="./chick.png" alt="">
+        </div>
+        <h3 class="nav3" id='seoul-date'>Date</h3>
+    </div>
+    <!-- main -->
+    <div class="input-container">
+        <div class="block">
+            <div class='main-msg'><!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+</head>
+
+<body>
+    <div>
+        {% for todo in data %}
+        <div>
+            <div>
+                {{ todo.date }}
+                {{ todo.todo }}
+                <input type="checkbox" onchange="updateCompletedStatus(this, '{{ todo.todo_num }}')">
+                <button type="submit">삭제</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <form action="{{url_for('todo_create')}}" method="GET">
+        <input type="text" name="todo">
+        <input type="date" name="date">
+        <button type="submit">Add Todo</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateCompletedStatus(checkbox, todoId) {
+            let isChecked = checkbox.checked;
+            $.ajax({
+                type: "POST",
+                url: "/update_todo_status",
+                data: { id: todoId, isChecked: isChecked }
+            });
+        }
+    </script>
+</body>
+
+</html>
+                <h3>{{}}</h3>
+            </div>
+            <form action="{{ url_for('todo_delete') }}" method="POST">
+                <input type="checkbox" onchange="updateCompletedStatus(this, '{{ todo.completed }}')">
+                <button type="submit">삭제</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        <input class="list" type="date">
+        <input class="list" type="text" placeholder="오늘의 할 일을 적어주세요!">
+        <button>기록하기</button>
+    </div>
+    </form>
+
+    <script>
+        let weather_url = "http://spartacodingclub.shop/sparta_api/weather/seoul";
+        fetch(weather_url)
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data);
+                let temp = data['temp']
+                let message = `오늘 날씨는 ${temp}ºC`
+                $('#weather-msg').text(message)
+            })
+
+        let time_url = "https://worldtimeapi.org/api/timezone/Asia/Seoul"
+        fetch(time_url)
+            .then(res => res.json())
+            .then(data => {
+                let datetime = data['datetime'].split('T')[0];
+                let time2 = `오늘 날짜는 ${datetime}`
+                $('#seoul-date').text(time2)
+            })
+    </script>
+</body>
+
+</html>
