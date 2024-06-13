@@ -38,10 +38,8 @@ def home():
     return render_template('todo.html', data=todo_list)
 
 # 할 일 추가
-
-
 @app.route('/todo', methods=['POST'])
-def add():
+def todo_create():
     todo_content = request.form.get('todo')
     date = request.form.get('date')
     if todo_content and date:
@@ -52,8 +50,6 @@ def add():
     return redirect(url_for('home'))
 
 # 체크박스 체크여부따라 completed값 변경
-
-
 @app.route('/update_todo_status', methods=['POST'])
 def update_todo_status():
     # id와 체크여부 값 받기

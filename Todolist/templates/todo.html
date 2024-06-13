@@ -7,6 +7,7 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
@@ -132,8 +133,23 @@
         .main-msg {
             display: flex;
         }
+
+        .checkbox-delete-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-delete-container input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .checkbox-delete-container button {
+            height: auto;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
     </style>
-    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -148,39 +164,42 @@
         <h3 class="nav3" id='seoul-date'>Date</h3>
     </div>
     <!-- main -->
+    {% for todo in data %}
     <div class="input-container">
         <div class="block">
-            <div class='main-msg'><!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List</title>
-</head>
-
-<body>
-    <div>
-        {% for todo in data %}
-        <div>
-            <div>
-                {{ todo.date }}
-                {{ todo.todo }}
-                <input type="checkbox" onchange="updateCompletedStatus(this, '{{ todo.todo_num }}')">
-                <button type="submit">삭제</button>
+            <!-- 오늘의 할일 -->
+            <div class='main-msg'>
+                <h3>{{ todo.date }}
+                    {{ todo.todo }}
+                </h3>
             </div>
-        </div>
-        {% endfor %}
-    </div>
 
-    <form action="{{url_for('todo_create')}}" method="GET">
-        <input type="text" name="todo">
-        <input type="date" name="date">
-        <button type="submit">Add Todo</button>
+            <!-- 체크박스 -->
+            <div class="checkbox-delete-container">
+                <input type="checkbox" onchange="updateCompletedStatus(this, '{{ todo.id }}')">
+                <!-- 삭제버튼 -->
+                <form action="{{ url_for('todo_delete') }}" method="POST">
+                    <input type="hidden" name="todo_msg" value="{{todo.id}}">
+                    <button type="submit">삭제</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+
+
+    <form action="{{url_for('todo_create')}}" method="POST">
+        <div class="footer">
+            <input class="list" type="date" name="date">
+            <input class="list" type="text" name="todo" placeholder="오늘의 할 일을 적어주세요!">
+            <button type="submit">기록하기</button>
+        </div>
     </form>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+        // ajax사용해서 화면전환없이 데이터 전송
         function updateCompletedStatus(checkbox, todoId) {
             let isChecked = checkbox.checked;
             $.ajax({
@@ -189,26 +208,8 @@
                 data: { id: todoId, isChecked: isChecked }
             });
         }
-    </script>
-</body>
 
-</html>
-                <h3>{{}}</h3>
-            </div>
-            <form action="{{ url_for('todo_delete') }}" method="POST">
-                <input type="checkbox" onchange="updateCompletedStatus(this, '{{ todo.completed }}')">
-                <button type="submit">삭제</button>
-            </form>
-        </div>
-    </div>
-    <div class="footer">
-        <input class="list" type="date">
-        <input class="list" type="text" placeholder="오늘의 할 일을 적어주세요!">
-        <button>기록하기</button>
-    </div>
-    </form>
 
-    <script>
         let weather_url = "http://spartacodingclub.shop/sparta_api/weather/seoul";
         fetch(weather_url)
             .then(res => res.json())
