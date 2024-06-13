@@ -59,18 +59,18 @@ def update_todo_status():
     # 체크여부에 따라 값 대입
     isChecked = isChecked == 'true'
 
-    #
     todo = ToDo.query.get(todo_id)
     todo.completed = isChecked
     db.session.commit()
     return redirect(url_for('home'))
 
 # 일정 삭제
-@app.route('/delete')
+@app.route('/delete', methods=['POST'])
 def todo_delete():
-    todo_msg_receive = request.args.get("todo_msg")
-    if todo_msg_receive:
-        todo_list = ToDo.query.get(todo_msg_receive)
+    todo_id_receive = request.form.get("todo_id")
+
+    if todo_id_receive:
+        todo_list = ToDo.query.get(todo_id_receive)
         if todo_list:
             db.session.delete(todo_list)
             db.session.commit()
