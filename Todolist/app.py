@@ -17,10 +17,9 @@ db = SQLAlchemy(app)
 # 데이터베이스 모델정의
 class ToDo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    todo = db.Column(db.String(200), nullable=False)  # 할일
-    date = db.Column(db.Date, nullable=False)  # 날짜
-    completed = db.Column(db.Boolean, default=False,
-                          nullable=False)  # 완료 여부 체크
+    todo = db.Column(db.String(200), nullable=False)                 # 할일
+    date = db.Column(db.Date, nullable=False)                        # 날짜
+    completed = db.Column(db.Boolean, default=False,nullable=False)  # 완료 여부 체크
 
     def __repr__(self):
         return f'<ToDo {self.todo}>'
@@ -43,8 +42,7 @@ def todo_create():
     todo_content = request.form.get('todo')
     date = request.form.get('date')
     if todo_content and date:
-        new_todo = ToDo(todo=todo_content,
-                        date=datetime.strptime(date, '%Y-%m-%d'))
+        new_todo = ToDo(todo=todo_content, date=datetime.strptime(date, '%Y-%m-%d'))
         db.session.add(new_todo)
         db.session.commit()
     return redirect(url_for('home'))
@@ -77,6 +75,16 @@ def todo_delete():
 
     return redirect(url_for('home'))
 
+# 수정
+@app.route('/edit_todo', methods=['POST'])
+def edit_todo(): # 필요한 데이터 가져오기
+    todo_id = request.form.get('todo_id')       # 변경하는거니까 todo_id(그대로 냅두고)
+    new_todo_content = request.form.get('todo') #(변경된)todo를 가져옴.
+    new_date = request.form.get('date')         # (변경된)date를 가져옴.
+
+    if todo:
+        todo.todo = new_todo_content                             #todo에 있는 todo값이 = 새로운 컨텐츠일때,
+        todo.date = date=datetime.strptime(new_date, '%Y-%m-%d') #todo에 있는 date값이 = 새로운 날짜일때
 
 if __name__ == '__main__':
     app.run(debug=True)
