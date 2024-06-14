@@ -78,13 +78,18 @@ def todo_delete():
 # 수정
 @app.route('/edit_todo', methods=['POST'])
 def edit_todo(): # 필요한 데이터 가져오기
-    todo_id = request.form.get('todo_id')       # 변경하는거니까 todo_id(그대로 냅두고)
-    new_todo_content = request.form.get('todo') #(변경된)todo를 가져옴.
-    new_date = request.form.get('date')         # (변경된)date를 가져옴.
+    todo_id = request.form.get('todo_id') # 변경하는거니까 todo_id(그대로 냅두고)
+    new_todo_content = request.form.get('new_todo') #(변경된)todo를 가져옴.
+    new_date = request.form.get('new_date') # (변경된)date를 가져옴.
+
+    todo = ToDo.query.get(todo_id) #todo값 가져오기
 
     if todo:
-        todo.todo = new_todo_content                             #todo에 있는 todo값이 = 새로운 컨텐츠일때,
-        todo.date = date=datetime.strptime(new_date, '%Y-%m-%d') #todo에 있는 date값이 = 새로운 날짜일때
+                todo.todo = new_todo_content #todo에 있는 todo값이 = 새로운 컨텐츠일때,
+                todo.date = datetime.strptime(new_date, '%Y-%m-%d') #todo에 있는 date값이 = 새로운 날짜일때
+                db.session.commit() # 적용함.
+
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)
